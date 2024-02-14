@@ -1,13 +1,14 @@
 package org.example.command;
 
 import org.example.domain.User;
+import org.example.exceptions.DatabaseUnavailableException;
 import org.example.service.UserService;
 
 import java.util.Queue;
 
 public class CommandConsumer implements Runnable {
-    private Queue<Command> commandQueue;
-    private UserService userService;
+    private final Queue<Command> commandQueue;
+    private final UserService userService;
 
     public CommandConsumer(Queue<Command> commandQueue, UserService userService) {
         this.commandQueue = commandQueue;
@@ -21,13 +22,25 @@ public class CommandConsumer implements Runnable {
             if (command != null) {
                 switch (command.getType()) {
                     case ADD:
-                        userService.addUser((User) command.getData());
+                        try {
+                            userService.addUser((User) command.getData());
+                        } catch (DatabaseUnavailableException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
                     case DELETE:
-                        userService.deleteAllUsers();
+                        try {
+                            userService.deleteAllUsers();
+                        } catch (DatabaseUnavailableException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
                     case PRINT:
-                        userService.printAllUsers();
+                        try {
+                            userService.printAllUsers();
+                        } catch (DatabaseUnavailableException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
                 }
             }

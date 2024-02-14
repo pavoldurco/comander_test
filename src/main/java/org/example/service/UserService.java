@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.domain.User;
+import org.example.exceptions.DatabaseUnavailableException;
 import org.example.repository.UserRepository;
 
 public class UserService {
@@ -10,15 +11,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void addUser(User user) {
+    public void addUser(User user) throws DatabaseUnavailableException {
         userRepository.addUser(user);
     }
 
-    public void deleteAllUsers() {
+    public void deleteAllUsers() throws DatabaseUnavailableException {
         userRepository.deleteAllUsers();
     }
 
-    public void printAllUsers() {
+    public void printAllUsers() throws DatabaseUnavailableException {
         userRepository.printAllUsers();
     }
 }

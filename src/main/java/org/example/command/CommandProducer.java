@@ -7,13 +7,11 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class CommandProducer implements Runnable {
-    private Queue<Command> commandQueue;
-    private UserService userService;
-    private Scanner scanner;
+    private final Queue<Command> commandQueue;
+    private final Scanner scanner;
 
     public CommandProducer(Queue<Command> commandQueue, UserService userService) {
         this.commandQueue = commandQueue;
-        this.userService = userService;
         this.scanner = new Scanner(System.in);
     }
 
@@ -26,10 +24,26 @@ public class CommandProducer implements Runnable {
             switch (command) {
                 case "add":
                     User user = new User();
-                    System.out.println("Enter user guid:");
-                    user.setUserGuid(scanner.nextLine());
-                    System.out.println("Enter user name:");
-                    user.setUserName(scanner.nextLine());
+                    String userGuid;
+                    do {
+                        System.out.println("Enter user guid:");
+                        userGuid = scanner.nextLine();
+                        if (userGuid.isEmpty()) {
+                            System.out.println("User guid cannot be empty.");
+                        }
+                    } while (userGuid.isEmpty());
+                    user.setUserGuid(userGuid);
+
+                    String userName;
+                    do {
+                        System.out.println("Enter user name:");
+                        userName = scanner.nextLine();
+                        if (userName.isEmpty()) {
+                            System.out.println("User name cannot be empty.");
+                        }
+                    } while (userName.isEmpty());
+                    user.setUserName(userName);
+
                     commandQueue.add(new Command(CommandType.ADD, user));
                     break;
                 case "delete":
