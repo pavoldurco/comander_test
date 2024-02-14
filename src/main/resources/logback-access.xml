@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="ACCESS_LOG_FILE" value="${ACCESS_LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}access.log}"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.access.net.URLEvaluator">
+                <URL>/actuator</URL>
+            </evaluator>
+            <onMatch>DENY</onMatch>
+        </filter>
+
+        <encoder class="net.logstash.logback.encoder.LogstashAccessEncoder">
+            <messagePattern>%clientHost - [%date] "%requestURL" %statusCode %bytesSent</messagePattern>
+            <timestampPattern>[ISO_LOCAL_DATE_TIME]</timestampPattern>
+            <fieldNames>
+                <timestamp>timestamp</timestamp>
+                <requestHeaders>request_headers</requestHeaders>
+                <remoteUser>[ignore]</remoteUser>
+            </fieldNames>
+            <customFields>{"type": "access_log"}</customFields>
+        </encoder>
+
+        <file>${ACCESS_LOG_FILE}</file>
+    </appender>
+
+    <springProfile name="!dev">
+        <appender-ref ref="FILE"/>
+    </springProfile>
+</configuration>
