@@ -3,6 +3,7 @@ package org.example.repository;
 import org.example.config.DatabaseConfig;
 import org.example.domain.User;
 import org.example.exceptions.DatabaseUnavailableException;
+import org.example.exceptions.InvalidUserException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -40,7 +41,7 @@ class UserRepositoryTest {
     @Nested
     class AddUserTests {
         @Test
-        void addUser() throws DatabaseUnavailableException {
+        void addUser() throws DatabaseUnavailableException, InvalidUserException {
             User user = new User();
             user.setUserName("testUser");
 
@@ -68,10 +69,12 @@ class UserRepositoryTest {
             User user = new User();
             user.setUserName("");
 
-            assertDoesNotThrow(() -> userRepository.addUser(user));
+            InvalidUserException exception = assertThrows(InvalidUserException.class, () -> userRepository.addUser(user));
 
-            verify(session, times(1)).save(user);
-            verify(transaction, times(1)).commit();
+            assertEquals("User name or user guid is empty", exception.getMessage());
+
+            verify(session, never()).save(user);
+            verify(transaction, never()).commit();
         }
     }
 

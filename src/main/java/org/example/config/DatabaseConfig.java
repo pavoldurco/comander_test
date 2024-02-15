@@ -28,6 +28,6 @@ public class DatabaseConfig {
     }
 
     public static void setSessionFactory(SessionFactory sessionFactory) {
-    DatabaseConfig.sessionFactory = sessionFactory;
-}
+        DatabaseConfig.sessionFactory = sessionFactory;
+    }
 }

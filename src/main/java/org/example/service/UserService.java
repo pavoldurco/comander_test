@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.domain.User;
 import org.example.exceptions.DatabaseUnavailableException;
+import org.example.exceptions.InvalidUserException;
 import org.example.repository.UserRepository;
 
 public class UserService {
@@ -11,7 +12,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void addUser(User user) throws DatabaseUnavailableException {
+    public void addUser(User user) throws DatabaseUnavailableException, InvalidUserException {
         userRepository.addUser(user);
     }
 

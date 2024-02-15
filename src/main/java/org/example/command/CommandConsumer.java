@@ -2,6 +2,7 @@ package org.example.command;
 
 import org.example.domain.User;
 import org.example.exceptions.DatabaseUnavailableException;
+import org.example.exceptions.InvalidUserException;
 import org.example.service.UserService;
 
 import java.util.Queue;
@@ -24,7 +25,7 @@ public class CommandConsumer implements Runnable {
                     case ADD:
                         try {
                             userService.addUser((User) command.getData());
-                        } catch (DatabaseUnavailableException e) {
+                        } catch (DatabaseUnavailableException | InvalidUserException e) {
                             throw new RuntimeException(e);
                         }
                         break;

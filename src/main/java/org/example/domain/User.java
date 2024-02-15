@@ -1,6 +1,7 @@
 package org.example.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.Objects;
 
@@ -11,9 +12,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
     @Column(nullable = false)
+    @NotBlank(message = "User GUID is mandatory")
     private String userGuid;
 
     @Column(nullable = false)
+    @NotBlank(message = "User name is mandatory")
     private String userName;
 
     public User() {
