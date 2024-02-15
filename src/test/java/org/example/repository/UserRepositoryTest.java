@@ -39,7 +39,6 @@ class UserRepositoryTest {
 
     @Nested
     class AddUserTests {
-
         @Test
         void addUser() throws DatabaseUnavailableException {
             User user = new User();
@@ -78,7 +77,6 @@ class UserRepositoryTest {
 
     @Nested
     class DeleteAllUsersTests {
-
         @Test
         void deleteAllUsers() throws DatabaseUnavailableException {
             Query query = mock(Query.class);
@@ -103,7 +101,6 @@ class UserRepositoryTest {
 
     @Nested
     class PrintAllUsersTests {
-
         @Test
         void printAllUsers() throws DatabaseUnavailableException {
             Query query = mock(Query.class);
