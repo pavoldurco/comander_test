@@ -58,7 +58,9 @@ class UserRepositoryTest {
 
             doThrow(RuntimeException.class).when(session).save(user);
 
-            assertThrows(DatabaseUnavailableException.class, () -> userRepository.addUser(user));
+            DatabaseUnavailableException exception = assertThrows(DatabaseUnavailableException.class, () -> userRepository.addUser(user));
+
+            assertEquals("Database is unavailable", exception.getMessage());
 
             verify(session, times(1)).save(user);
             verify(transaction, never()).commit();
@@ -95,7 +97,9 @@ class UserRepositoryTest {
         void deleteAllUsers_whenDatabaseUnavailable() {
             doThrow(RuntimeException.class).when(session).createQuery("DELETE FROM User");
 
-            assertThrows(DatabaseUnavailableException.class, () -> userRepository.deleteAllUsers());
+            DatabaseUnavailableException exception = assertThrows(DatabaseUnavailableException.class, () -> userRepository.deleteAllUsers());
+
+            assertEquals("Database is unavailable", exception.getMessage());
 
             verify(session, times(1)).createQuery("DELETE FROM User");
             verify(transaction, never()).commit();
